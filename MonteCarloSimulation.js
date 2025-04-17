@@ -51,25 +51,27 @@ const MonteCarloSimulation = () => {
   };
 
   // Function to render the chart
-  const renderChart = () => {
-    if (simulationResults.length === 0) {
-      return <Text style={styles.placeholderText}>Run a simulation to see results.</Text>;
-    }
+  // Function to render the chart
+    const renderChart = () => {
+      if (simulationResults.length === 0) {
+        return <Text style={styles.placeholderText}>Run a simulation to see results.</Text>;
+      }
 
-    // Convert simulation results to datasets
-    const datasets = simulationResults.map((path) => ({
-      data: path.map((point) => point.y),
-    }));
+      // Prepare datasets for the chart
+      const datasets = simulationResults.map((path) => ({
+        data: path.map((point) => point.y),
+        color: (opacity = 1) => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${opacity})`,
+        strokeWidth: 2, // Line thickness
+      }));
 
-    return (
-      <ScrollView horizontal>
-        {datasets.map((line, index) => (
+      return (
+        <ScrollView horizontal>
           <LineChart
-            key={index}
             data={{
-              datasets: [line],
+              labels: [], // Optional labels
+              datasets: datasets,
             }}
-            width={screenWidth * 1.5} // Adjust width for scrollable chart
+            width={screenWidth * 2} // Adjust width for all datasets
             height={300}
             chartConfig={{
               backgroundColor: '#f5f5f5',
@@ -84,11 +86,15 @@ const MonteCarloSimulation = () => {
             }}
             bezier
             style={styles.chart}
+            withShadow={false} // Disable shadow under the line
+            withInnerLines={false} // Optionally disable inner grid lines for a cleaner look
+            withOuterLines={false} // Optionally disable outer grid lines
           />
-        ))}
-      </ScrollView>
-    );
-  };
+        </ScrollView>
+      );
+    };
+
+
 
   return (
     <View style={styles.container}>
