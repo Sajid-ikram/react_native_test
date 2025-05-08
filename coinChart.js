@@ -81,6 +81,7 @@ const CryptoChartScreen = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.title}>{cryptocurrency.name || "Unknown"}</Text>
       </View>
+      {spots.length > 0 ? (
       <LineChart
         data={{
           labels: [],
@@ -97,10 +98,13 @@ const CryptoChartScreen = ({ navigation }) => {
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: { borderRadius: 16 },
           propsForDots: { r: "0" },
+          lineWidth : .2,
         }}
-        bezier
+        bezier = {false}
         style={{ marginVertical: 8, borderRadius: 16 }}
-      />
+      />) : (
+          <Text style={{ textAlign: 'center', marginTop: 50 }}>Loading chart data...</Text>
+        )}
       <Button
         title="Predict Future Price"
         onPress={() =>  navigation.navigate('Simulation', { cryptocurrency })}
